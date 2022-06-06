@@ -39,14 +39,14 @@ function generartoken (usuari) {
 function autenticarusuari(req, res, next){
     const token = req.cookies['AuthToken']
     if (token) {
-        jwt.verify(token, clau, (err, user) => { // Verifiquem el token passant-li la nostra secret key.
+        jwt.verify(token, clau, (err, user) => { // Verifiquem el token passant-li la nostra clau secreta.
             if (err) { // Si dona error, el token és invalid
                 return res.sendStatus(403); 
             }
             req.user = user;
             next();
         });
-    } else { // Si va per aci és perque no s'ha trovat la capçalera 'AuthToken' o ve buida (logout). Per tant ha de fer login
+    } else { // Si va per aci és perque no s'ha trobat el token o ve buida. Per tant ha de fer login
         res.json({"message":"Has de loguejar-te per accedir ací"})
         }
 };
@@ -151,7 +151,7 @@ app.post("/api/autenticar/", (req, res, next) => {
     });
 })
 
-app.get('/api/protegit', autenticarusuari, (req, res) => { // Al protected poden accedir tots els usuaris autenticats, per tant, sols comprovem que el token siga valid
+app.get('/api/protegit', autenticarusuari, (req, res) => { // Sola poden accedir el autenticats, mentre el token siga valid
     res.json({
         "message":"Ets un usuari autenticat"
     })
